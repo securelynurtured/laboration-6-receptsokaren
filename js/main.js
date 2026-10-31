@@ -94,8 +94,21 @@ function displayRecipe(recipe) {
 
   article.appendChild(info);
 
+  // Skapa rubrik och punktlista för ingredienserna.
+  const ingredientsHeading = document.createElement("h4");
+  ingredientsHeading.textContent = "Ingredients";
+  article.appendChild(ingredientsHeading);
+  article.appendChild(createList("ul", recipe.ingredients));
+
+  // Skapa rubrik och numrerad lista för instruktionerna.
+  const instructionsHeading = document.createElement("h4");
+  instructionsHeading.textContent = "Instructions";
+  article.appendChild(instructionsHeading);
+  article.appendChild(createList("ol", recipe.instructions));
+
   recipeContainer.appendChild(article);
 }
+
 // Skapa ett stycke med en fet etikett och ett värde.
 function createInfoParagraph(label, value) {
   const paragraph = document.createElement("p");
@@ -106,4 +119,17 @@ function createInfoParagraph(label, value) {
   paragraph.append(" " + value);
 
   return paragraph;
+}
+
+// Skapa en lista med en listpunkt för varje text i arrayen.
+function createList(listType, items) {
+  const list = document.createElement(listType);
+
+  for (const item of items) {
+    const listItem = document.createElement("li");
+    listItem.textContent = item;
+    list.appendChild(listItem);
+  }
+
+  return list;
 }
