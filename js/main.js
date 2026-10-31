@@ -9,6 +9,7 @@ const searchForm = document.getElementById("searchform");
 const searchInput = document.getElementById("search");
 const errorMessage = document.getElementById("error");
 const message = document.getElementById("message");
+const recipeContainer = document.getElementById("recipe");
 
 // Kör handleSearch när användaren skickar formuläret.
 searchForm.addEventListener("submit", handleSearch);
@@ -32,6 +33,9 @@ function handleSearch(event) {
 
 // Hämta recept som matchar användarens sökfras.
 async function fetchRecipes(searchTerm) {
+  // Ta bort föregående recept inför den nya sökningen.
+  recipeContainer.textContent = "";
+
   message.textContent = "Hämtar recept...";
 
   try {
@@ -58,10 +62,26 @@ async function fetchRecipes(searchTerm) {
     const recipe = data.recipes[0];
 
     message.textContent = "";
-    console.log("First recipe:", recipe);
-    
+    displayRecipe(recipe);
   } catch (error) {
     message.textContent = "Det gick inte att hämta recept. Försök igen.";
     console.error("Request failed:", error);
   }
+}
+
+// Skapa och visa receptets namn och bild.
+function displayRecipe(recipe) {
+  const article = document.createElement("article");
+
+  const heading = document.createElement("h3");
+  heading.textContent = recipe.name;
+
+  const image = document.createElement("img");
+  image.src = recipe.image;
+  image.alt = recipe.name;
+
+  article.appendChild(heading);
+  article.appendChild(image);
+
+  recipeContainer.appendChild(article);
 }
