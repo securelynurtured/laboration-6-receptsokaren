@@ -1,46 +1,57 @@
 "use strict";
 /*
  * Laboration 6 - Receptsökaren
- * Namn: Henriette Heikki 
+ * Namn: Henriette Heikki
  */
 
-// Find the form, input and validation message in the page.
+// Hämta formuläret, sökfältet och elementet för valideringsfel från sidan.
 const searchForm = document.getElementById("searchform");
 const searchInput = document.getElementById("search");
 const errorMessage = document.getElementById("error");
 const message = document.getElementById("message");
 
-// Run handleSearch when the user submits the form.
+// Kör handleSearch när användaren skickar formuläret.
 searchForm.addEventListener("submit", handleSearch);
 
 function handleSearch(event) {
-    // Keep the browser from reloading the page when the form is submitted.
-    event.preventDefault();
+  // Förhindra att sidan laddas om när formuläret skickas.
+  event.preventDefault();
 
-    const searchTerm = searchInput.value.trim();
+  const searchTerm = searchInput.value.trim();
 
-    if (searchTerm === "") {
-        errorMessage.textContent = "Skriv en sökfras för att söka efter recept.";
-        return;
-    }
+  if (searchTerm === "") {
+    errorMessage.textContent = "Skriv en sökfras för att söka efter recept.";
+    return;
+  }
 
-    // Clear any previous validation error after a valid search.
-    errorMessage.textContent = "";
+  // Ta bort tidigare valideringsfel när sökfrasen är giltig.
+  errorMessage.textContent = "";
 
-   fetchRecipes(searchTerm);
+  fetchRecipes(searchTerm);
 }
 
-// Fetch recipes matching the user's search.
+// Hämta recept som matchar användarens sökfras.
 async function fetchRecipes(searchTerm) {
-    message.textContent = "Hämtar recept...";
+  message.textContent = "Hämtar recept...";
 
-    try {
-        const url = "https://dummyjson.com/recipes/search?q=" + encodeURIComponent(searchTerm);
-        const response = await fetch(url);
+  try {
+    const url =
+      "https://dummyjson.com/recipes/search?q=" +
+      encodeURIComponent(searchTerm);
+    const response = await fetch(url);
 
-        console.log("Server response:", response);
-    } catch (error) {
-        message.textContent = "Det gick inte att hämta recept. Försök igen.";
-        console.error("Request failed:", error);
+    // Avbryt om servern returnerade en HTTP-status som visar ett fel.
+    if (!response.ok) {
+      throw new Error("HTTP error: " + response.status);
     }
+
+    // Läs JSON-svaret och omvandla det till ett JavaScript-objekt.
+    const data = await response.json();
+
+    message.textContent = "";
+    console.log("Recipe data:", data);
+  } catch (error) {
+    message.textContent = "Det gick inte att hämta recept. Försök igen.";
+    console.error("Request failed:", error);
+  }
 }
