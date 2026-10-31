@@ -48,8 +48,18 @@ async function fetchRecipes(searchTerm) {
     // Läs JSON-svaret och omvandla det till ett JavaScript-objekt.
     const data = await response.json();
 
+    // Visa ett meddelande om sökningen inte gav några recept.
+    if (data.recipes.length === 0) {
+      message.textContent = "Inget recept hittades. Prova en annan sökfras.";
+      return;
+    }
+
+    // Hämta det första receptet i sökresultatet.
+    const recipe = data.recipes[0];
+
     message.textContent = "";
-    console.log("Recipe data:", data);
+    console.log("First recipe:", recipe);
+    
   } catch (error) {
     message.textContent = "Det gick inte att hämta recept. Försök igen.";
     console.error("Request failed:", error);
