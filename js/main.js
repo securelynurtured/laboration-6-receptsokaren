@@ -83,5 +83,27 @@ function displayRecipe(recipe) {
   article.appendChild(heading);
   article.appendChild(image);
 
+  // Samla receptets information i en behållare.
+  const info = document.createElement("div");
+  info.className = "recipe-info";
+
+  info.appendChild(createInfoParagraph("Servings:", recipe.servings));
+  info.appendChild(createInfoParagraph("Prep time:", recipe.prepTimeMinutes + " minutes"));
+  info.appendChild(createInfoParagraph("Cooking time:", recipe.cookTimeMinutes + " minutes"));
+  info.appendChild(createInfoParagraph("Difficulty:", recipe.difficulty));
+
+  article.appendChild(info);
+
   recipeContainer.appendChild(article);
+}
+// Skapa ett stycke med en fet etikett och ett värde.
+function createInfoParagraph(label, value) {
+  const paragraph = document.createElement("p");
+  const strong = document.createElement("strong");
+
+  strong.textContent = label;
+  paragraph.appendChild(strong);
+  paragraph.append(" " + value);
+
+  return paragraph;
 }
